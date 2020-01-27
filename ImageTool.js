@@ -67,7 +67,7 @@ let imgWidthHeightRotateCanvas = (width,height,degress)=>{
         height:parseInt(h)
     }
 }
-let imgCompressAndOrientationAdjust = (file)=>{
+let imgCompressAndOrientationAdjust = (file,compressConfig)=>{
     return new Promise((resolve)=>{
         exifRotateAngle(file).then(file=>{
             let reader = new FileReader()
@@ -79,9 +79,8 @@ let imgCompressAndOrientationAdjust = (file)=>{
                     console.log('img',img)
                     let canvas = document.createElement("canvas");
                     let ctx = canvas.getContext("2d");
-                    let compress = imgWidthHeightCompress(img.width,img.height)
                     if(file.exifdata && file.exifdata.ImageWidth){
-                        compress = imgWidthHeightCompress(file.exifdata.ImageWidth,file.exifdata.ImageHeight)
+                        let compress = imgWidthHeightCompress(file.exifdata.ImageWidth,file.exifdata.ImageHeight,compressConfig)
                         let angle = file.angle
                         let rotateCanvas = imgWidthHeightRotateCanvas(compress.width,compress.height,angle)
                         canvas.width =rotateCanvas.width
@@ -90,6 +89,7 @@ let imgCompressAndOrientationAdjust = (file)=>{
                         ctx.rotate(angle*Math.PI/180)
                         ctx.drawImage(img,-compress.width/2,-compress.height/2,compress.width,compress.height)
                     }else{
+                        let compress = imgWidthHeightCompress(img.width,img.height,compressConfig)
                         canvas.width =compress.width
                         canvas.height = compress.height
                         ctx.drawImage(img,0,0,compress.width,compress.height)
@@ -102,9 +102,9 @@ let imgCompressAndOrientationAdjust = (file)=>{
         })
     })
 }
-let imgCompressAndOrientationAdjust2Blob = (file)=>{
+let imgCompressAndOrientationAdjust2Blob = (file,compressConfig)=>{
     return new Promise((resolve,reject)=>{
-        imgCompressAndOrientationAdjust(file).then(base64=>{
+        imgCompressAndOrientationAdjust(file,compressConfig).then(base64=>{
             resolve(base64ToBlob(base64,file.type))
         })
     })

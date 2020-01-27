@@ -1,6 +1,6 @@
 {
   "name": "image-tool",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "image convert tool. base64 blob, image upload compress exifdata handle.",
   "main": "ImageTool.js",
   "scripts": {
@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/mathcoder23/js-image-tool/issues"
   },
-  "homepage": "https://github.com/mathcoder23/js-image-tool#readme"
+  "homepage": "https://github.com/mathcoder23/js-image-tool#readme",
+  "dependencies": {
+    "exif-js": "^2.3.0"
+  }
 }
